@@ -121,4 +121,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Support
 
-For support, email mohan96969a@gmail.com or join our Slack channel.
+For support,  mohan96969a@gmail.com or join our Slack channel.
