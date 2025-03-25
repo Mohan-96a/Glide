@@ -29,7 +29,7 @@ A sleek and user-friendly ride-booking application built with vanilla JavaScript
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/glide-booking.git
+   git clone https://github.com/Mohan-96a/glide-booking.git
    ```
 
 2. Open the project:
@@ -107,7 +107,7 @@ The application is fully responsive and works seamlessly on:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
 ## 🤝 Contributing
 
@@ -121,4 +121,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📞 Support
 
-For support, email support@glide-booking.com or join our Slack channel.
+For support, email mohan96969a@gmail.com or join our Slack channel.
