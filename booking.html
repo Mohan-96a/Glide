@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glide - Book Your Ride</title>
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff9c4, #fff176);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(to right, #ffd600, #ffea00);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            background: #ffd600;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 70px;
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-option {
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-option img {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+
+        .nav-option:hover img {
+            border-color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-option.selected img {
+            border-color: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-option::after {
+            content: attr(data-price);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #92400e;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-option:hover::after {
+            opacity: 1;
+            bottom: -5px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .location-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .location-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .location-group:focus-within label {
+            color: #ffd600;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #ffd600;
+            box-shadow: 0 0 0 3px rgba(255, 214, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        #selected-vehicle {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: #fef3c7;
+            border-radius: 0.5rem;
+            color: #92400e;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #ffd600;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: #ffea00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 214, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .fare {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: #ecfdf5;
+            border-radius: 0.5rem;
+            color: #059669;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .driver-details {
+            background: #f0f9ff;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .driver-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0369a1;
+            font-size: 0.95rem;
+        }
+
+        .estimated-time {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            nav {
+                padding: 10px 5px;
+            }
+
+            .nav-option img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🛵 Glide</div>
+    </header>
+
+    <nav id="navbar">
+        <div class="nav-option" onclick="selectVehicle('Bike')" data-price="From ₹50">
+            <img src="https://play-lh.googleusercontent.com/9HyDHKMpf6qa6EPhUbX3qgVmdbCQnkYtQxjoM_GgAaQCBlGY0XJcgYiu5jpnm0nZP6Q" alt="Bike">
+        </div>
+        <div class="nav-option" onclick="selectVehicle('Auto')" data-price="From ₹70">
+            <img src="https://5.imimg.com/data5/SELLER/Default/2021/1/UE/MV/AS/99748242/ape-auto-dxl-ard-500x500.jpg" alt="Auto">
+        </div>
+        <div class="nav-option" onclick="selectVehicle('Cab')" data-price="From ₹100">
+            <img src="https://png.pngtree.com/png-clipart/20210822/original/pngtree-yellow-car-icon-png-image_6651022.jpg" alt="Cab">
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Book Your Ride</h2>
+        
+        <div class="location-group">
+            <label for="pickup">Pickup Location</label>
+            <select id="pickup">
+                <option value="">Select Pickup</option>
+                <option value="Mangalagiri">Mangalagiri</option>
+                <option value="Amaravathi">Amaravathi</option>
+                <option value="Vijayawada">Vijayawada</option>
+                <option value="Guntur">Guntur</option>
+            </select>
+        </div>
+
+        <div class="location-group">
+            <label for="drop">Drop Location</label>
+            <select id="drop">
+                <option value="">Select Drop</option>
+                <option value="Mangalagiri">Mangalagiri</option>
+                <option value="Amaravathi">Amaravathi</option>
+                <option value="Vijayawada">Vijayawada</option>
+                <option value="Guntur">Guntur</option>
+            </select>
+        </div>
+
+        <div id="selected-vehicle" class="hidden">Selected Vehicle: None</div>
+
+        <div class="button-group">
+            <button onclick="calculateFare()">Estimate Fare</button>
+            <div id="fare" class="fare hidden"></div>
+            <button onclick="bookRide()">Book Ride</button>
+        </div>
+
+        <div id="booking-details" class="hidden">
+            <div class="driver-details">
+                <div class="driver-info-item">👤 <span id="driverInfo"></span></div>
+                <div class="driver-info-item">📞 <span id="driverPhone"></span></div>
+                <div class="driver-info-item">🔑 <span id="otp-display"></span></div>
+            </div>
+            <div id="estimated-time" class="estimated-time"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedVehicleType = null;
+
+// Check if user is logged in
+window.onload = function() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) {
+        window.location.href = '/Glide.html';
+    }
+};
+
+function showError(element) {
+    element.classList.add('error-shake');
+    setTimeout(() => element.classList.remove('error-shake'), 500);
+}
+
+function selectVehicle(type) {
+    selectedVehicleType = type;
+    document.querySelectorAll('.nav-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    const selectedOption = document.querySelector(`.nav-option:nth-child(${
+        type === 'Bike' ? 1 : type === 'Auto' ? 2 : 3
+    })`);
+    selectedOption.classList.add('selected');
+    
+    const selectedVehicleElement = document.getElementById('selected-vehicle');
+    selectedVehicleElement.textContent = `Selected Vehicle: ${type}`;
+    selectedVehicleElement.classList.remove('hidden');
+}
+
+function calculateFare() {
+    const pickup = document.getElementById('pickup');
+    const drop = document.getElementById('drop');
+
+    if (!selectedVehicleType) {
+        alert('Please select a vehicle first');
+        return;
+    }
+
+    if (!pickup.value || !drop.value) {
+        if (!pickup.value) showError(pickup);
+        if (!drop.value) showError(drop);
+        alert('Please select both pickup and drop locations');
+        return;
+    }
+
+    if (pickup.value === drop.value) {
+        showError(pickup);
+        showError(drop);
+        alert('Pickup and drop locations cannot be the same');
+        return;
+    }
+
+    const baseFares = {
+        'Bike': 50,
+        'Auto': 70,
+        'Cab': 100
+    };
+
+    const fare = baseFares[selectedVehicleType] + Math.floor(Math.random() * 50);
+    const fareElement = document.getElementById('fare');
+    fareElement.textContent = `Estimated Fare: ₹${fare}`;
+    fareElement.classList.remove('hidden');
+}
+
+function bookRide() {
+    if (!selectedVehicleType) {
+        alert('Please select a vehicle first');
+        return;
+    }
+
+    const pickup = document.getElementById('pickup');
+    const drop = document.getElementById('drop');
+
+    if (!pickup.value || !drop.value) {
+        if (!pickup.value) showError(pickup);
+        if (!drop.value) showError(drop);
+        alert('Please select both pickup and drop locations');
+        return;
+    }
+
+    const drivers = ['Ravi Kumar', 'Amit Singh', 'Rohit Sharma', 'Priya Das'];
+    const assignedDriver = drivers[Math.floor(Math.random() * drivers.length)];
+    const rideOTP = Math.floor(1000 + Math.random() * 9000);
+    const driverPhoneNumber = '+91 ' + Math.floor(Math.random() * 9000000000 + 1000000000);
+    const estimatedMinutes = Math.floor(Math.random() * 10) + 5;
+
+    document.getElementById('driverInfo').textContent = `Driver: ${assignedDriver}`;
+    document.getElementById('driverPhone').textContent = `Phone: ${driverPhoneNumber}`;
+    document.getElementById('otp-display').textContent = `Ride OTP: ${rideOTP}`;
+    document.getElementById('estimated-time').textContent = `🕐 Estimated arrival time: ${estimatedMinutes} minutes`;
+    
+    document.getElementById('booking-details').classList.remove('hidden');
+}
+    </script>
+      
+</body>
+</html>
